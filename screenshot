@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ $1 ]
+then
+	maim -s $HOME/Pictures/screenshots/$(date +'%Y%m%d-%H:%M:%S').png
+else
+	maim -s | xclip -selection clipboard -t image/png
+fi

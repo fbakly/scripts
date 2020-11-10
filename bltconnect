@@ -1,0 +1,20 @@
+#!/bin/sh
+
+DEVICES=$( bluetoothctl devices | awk '{$1 = ""; print $0}' )
+DEVICES=$( printf "$DEVICES\n Disconnect\n" )
+DEVICE=$( echo $"$DEVICES" | dmenu -i -l 3 )
+DEVICE=$( echo "$DEVICE" | awk '{print $1}' )
+DEVICENAME=$( echo "$DEVICES" | awk -v dev=$DEVICE \
+	'$1 == dev { $1 = ""; print $0 }' )
+
+if [ -n "$DEVICE" ]
+then
+	if [ "$DEVICE" = "Disconnect" ]
+	then
+		bluetoothctl disconnect && notify-send -u normal -t 2000 "bltconnect" \
+			"Disconnected $DEVICENAME"
+	else
+		bluetoothctl connect $DEVICE > /dev/null || notify-send -u critical \
+			-t 2000 "bltconnect" "Failed to connect to $DEVICENAME"
+	fi
+fi

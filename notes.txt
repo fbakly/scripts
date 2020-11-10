@@ -1,0 +1,1 @@
+All the scripts are linked to /usr/bin in order to execute from dmenu

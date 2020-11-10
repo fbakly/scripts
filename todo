@@ -1,0 +1,18 @@
+#!/bin/sh
+
+choice=$( printf "add\ndelete" | dmenu -i -l 2 )
+
+if [ "$choice" = "add" ]
+then
+	todo=$( echo | dmenu -p "New todo" )
+	$( echo "$todo ($(date +'%H:%M %d-%m-%Y'))" >> $HOME/todo )
+elif [ "$choice" = "delete" ]
+then
+	todo=$( cat $HOME/todo | dmenu -i -l 10 -p "todo" ) 
+	if [ "$todo" ]
+	then
+		sed -i "/$todo/d" $HOME/todo
+	fi
+else
+	exit 1
+fi

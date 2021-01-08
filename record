@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ $# -ne 2 ]
+then
+	printf "Usage: record_screen option output_file_path\n"
+	printf "Options: screen/cam\n"
+else
+	if [ $1 == "screen" ]
+	then
+		ffmpeg -video_size 1920x1080 -f x11grab -i :0.0+1920,0 -f pulse -i default -c:v libx264 -c:a aac -ac 1 $2
+	elif [ $1 == "cam" ]
+	then
+		ffmpeg -f v4l2 -video_size 1920x1080 -i /dev/video0 -f pulse -i default -c:v libx264 -preset ultrafast -c:a aac -ac 1 $2
+	else
+		printf "Invaid option\n"
+	fi
+fi
